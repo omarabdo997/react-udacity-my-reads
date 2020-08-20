@@ -5,7 +5,8 @@ import Book from './Book'
 
 class SearchBooks extends Component {
     state = {
-        searchedBooks: []
+        searchedBooks: [],
+        query:'',
     }
 
     addShelf= (searchedBooks) => {     
@@ -17,20 +18,29 @@ class SearchBooks extends Component {
             if (!book.shelf) book.shelf = 'none';
         }
     }
-
+    changeQuery = (query) => {
+        this.setState(() => ({
+            query
+        }))
+    }
     searchBooks = (query) => {
         if (query==='') {
             this.setState(()=>({
                 searchedBooks: [],
             }))
-        } else {
+        } else {  
             search(query)
             .then((searchedBooks) => {
-                this.setState(()=>{
-                    this.addShelf(searchedBooks);
-                    return {searchedBooks};
-                })
+                if (query === this.state.query) {
+                    this.setState(()=>{
+                        this.addShelf(searchedBooks);
+                        return {searchedBooks};
+                    })
+                }      
             })
+
+            
+                      
         }  
     }
     
@@ -38,7 +48,7 @@ class SearchBooks extends Component {
         let {changeShelf}= this.props
         return (
             <div className="search-books">
-                <SearchBar searchBooks={this.searchBooks}/>
+                <SearchBar searchBooks={this.searchBooks} query={this.state.query} changeQuery={this.changeQuery}/>
                 <div className="search-books-results">
                     <ol className="books-grid">
                         {!this.state.searchedBooks.error && this.state.searchedBooks.map((book)=>(
