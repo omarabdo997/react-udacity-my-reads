@@ -7,9 +7,9 @@ Of course, you are free to start this project from scratch if you wish! Just be 
 ## Description
 
 MyReads Project is made using React and Node.js it's aim is to search for books and add them to my reads section this section consists of three shelves which are:
-1- Currently Reading
-2- Want to Read
-3- Read
+    1- Currently Reading
+    2- Want to Read
+    3- Read
 This Project supports searching for books when adding them to shelves and also support changing the books shelves for better experience.
 
 ## TL;DR
