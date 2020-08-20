@@ -27,12 +27,33 @@ class BooksApp extends React.Component {
       })
   }
 
+  // changeShelf = (book, shelf) => {
+  //   BooksAPI.update(book, shelf)
+  //     .then(() => {
+  //       this.retrieveAndUpdate()
+  //     })
+  // }
   changeShelf = (book, shelf) => {
     BooksAPI.update(book, shelf)
       .then(() => {
-        this.retrieveAndUpdate()
+        this.setState(currentState => {
+          let bookExists = false;
+          let index=0;
+          book.shelf=shelf;
+          for (let shelfBook of currentState.shelfBooks) {
+            if (book.id === shelfBook.id) {
+              shelfBook.shelf = shelf;
+              if (shelf === 'none') currentState.shelfBooks.splice(index, 1);
+              bookExists = true;
+              break;
+            }
+            index++;
+          }
+          if (bookExists) return {shelfBooks:currentState.shelfBooks};
+          else return {shelfBooks: [...currentState.shelfBooks, book]} 
+        })
       })
-  } 
+  }  
      
   componentDidMount() {
     this.retrieveAndUpdate();
@@ -43,12 +64,12 @@ class BooksApp extends React.Component {
   render() {
     return (
       <div className="app">
-        <Route path='/search' render={()=>(
+        <Route path='/search'> 
           <SearchBooks changeShelf={this.changeShelf} shelfBooks={this.state.shelfBooks}/>
-        )}/>
-        <Route exact path='/' render={()=>(
+        </Route>
+        <Route exact path='/'>
           <MyReads shelfBooks={this.state.shelfBooks} changeShelf={this.changeShelf}/>
-        )}/>
+        </Route>
       </div>
     )
   }       
